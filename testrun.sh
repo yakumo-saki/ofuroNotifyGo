@@ -2,9 +2,13 @@
 
 export AWS_REGION=ap-northeast-3
 
-# WebHooks
-export SLACK_API_KEY=abc123
+# WebHooks - Slack
+export SLACK_CHANNEL="#general"
+export SLACK_URL=https://hooks.slack.com/services/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
+export SLACK_DISP_NAME=ofuroNotify
+export SlackIconEmoji=ghost
 
+# WebHooks - Mastodon
 export MASTODON_KEY=bcd123
 export MASTODON_URL=http://localhost
 

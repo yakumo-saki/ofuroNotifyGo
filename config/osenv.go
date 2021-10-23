@@ -17,7 +17,10 @@ func LoadFromEnvValue() *ConfigStruct {
 	conf.Output = os.Getenv("OUTPUT")
 	conf.Loglevel = os.Getenv("LOGLEVEL")
 
-	conf.SlackApiKey = os.Getenv("SLACK_API_KEY")
+	conf.SlackHookUrl = os.Getenv("SLACK_URL")
+	conf.SlackChannel = os.Getenv("SLACK_CHANNEL")
+	conf.SlackDisplayName = os.Getenv("SLACK_DISP_NAME")
+	conf.SlackIconEmoji = os.Getenv("SLACK_ICON_EMOJI")
 
 	conf.MastodonKey = os.Getenv("MASTODON_KEY")
 	conf.MastodonUrl = os.Getenv("MASTODON_URL")

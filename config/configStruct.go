@@ -11,7 +11,11 @@ type ConfigStruct struct {
 	Output     string
 	Loglevel   string
 
-	SlackApiKey string
+	SlackHookUrl     string
+	SlackChannel     string
+	SlackDisplayName string
+	SlackIconEmoji   string
+
 	MastodonUrl string
 	MastodonKey string
 	WebhookUrl  string

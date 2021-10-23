@@ -9,4 +9,16 @@ func SetDefaultConfig(c *ConfigStruct) {
 	if c.Loglevel == "" {
 		c.Output = "WARN"
 	}
+
+	// slack
+	if c.SlackChannel == "" {
+		c.SlackChannel = "#general"
+	}
+	if c.SlackDisplayName == "" {
+		c.SlackDisplayName = "bot"
+	}
+	if c.SlackIconEmoji == "" {
+		c.SlackIconEmoji = "ghost"
+	}
+
 }
