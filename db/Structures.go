@@ -12,7 +12,7 @@ const HIST_TBL_KEY = "OfuroHistories"
 //   "LastIn" : { "NULL" : true } }
 type LastOfuro struct {
 	Key      string `dynamo:"key,hash"`
-	UnixTime int    // 更新したときのUnixTime
+	UnixTime int    // 更新したときのUnixTime。OfuroHistoryと合わせる
 	InOut    string // "In" or "Out"
 	DateTime string // yyyyMMddHH24mmss
 	Lastin   string // "Out" の時のみ。 InしたときのDateTime

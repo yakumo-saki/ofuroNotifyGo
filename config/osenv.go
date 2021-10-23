@@ -17,5 +17,12 @@ func LoadFromEnvValue() *ConfigStruct {
 	conf.Output = os.Getenv("OUTPUT")
 	conf.Loglevel = os.Getenv("LOGLEVEL")
 
+	conf.SlackApiKey = os.Getenv("SLACK_API_KEY")
+
+	conf.MastodonKey = os.Getenv("MASTODON_KEY")
+	conf.MastodonUrl = os.Getenv("MASTODON_URL")
+
+	conf.WebhookUrl = os.Getenv("WEBHOOK_URL")
+
 	return &conf
 }

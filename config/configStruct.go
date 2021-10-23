@@ -10,6 +10,11 @@ type ConfigStruct struct {
 	DisableSSL bool
 	Output     string
 	Loglevel   string
+
+	SlackApiKey string
+	MastodonUrl string
+	MastodonKey string
+	WebhookUrl  string
 }
 
 func (c ConfigStruct) String() string {

@@ -8,6 +8,63 @@ import (
 
 var logger = ylog.GetLogger("dynamo")
 
+func MakeSureTableExist() {
+	db := getConnection()
+
+	if err := db.CreateTable(LAST_TBL, LastOfuro{}).Run(); err != nil {
+		logger.D(LAST_TBL+" Table already created.", err)
+	}
+	if err := db.CreateTable(HIST_TBL, OfuroHistory{}).Run(); err != nil {
+		logger.D(HIST_TBL+" Table already created.", err)
+	}
+}
+
+func CreateLastOfuro(inOut string, lastInDateTime string) *LastOfuro {
+	l := LastOfuro{
+		Key:      LAST_TBL_KEY,
+		UnixTime: int(time.Now().Unix()),
+		InOut:    inOut,
+		DateTime: time.Now().Format("20060102150405"),
+		Lastin:   lastInDateTime,
+	}
+
+	return &l
+}
+
+func GetLastOfuro() *LastOfuro {
+	db := getConnection()
+
+	lastTable := db.Table(LAST_TBL)
+
+	// get the same item
+	var result LastOfuro
+	err := lastTable.Get("key", LAST_TBL_KEY).One(&result)
+	if err != nil {
+		logger.D("failed GET:", err)
+		return nil
+	}
+	logger.D(result)
+
+	return &result
+}
+
+func PutLastOfuro(lastOfuro *LastOfuro) error {
+
+	db := getConnection()
+	lastTable := db.Table(LAST_TBL)
+	err := lastTable.Put(lastOfuro).Run()
+
+	return err
+}
+
+func PutHistory(history *OfuroHistory) error {
+	db := getConnection()
+	lastTable := db.Table(HIST_TBL)
+	err := lastTable.Put(history).Run()
+
+	return err
+}
+
 func Test() {
 
 	db := getConnection()
@@ -38,14 +95,6 @@ func Test() {
 	}
 	logger.D("Histry PUT OK.")
 
-	// get the same item
-	var result LastOfuro
-	err = lastTable.Get("key", LAST_TBL_KEY).One(&result)
-	if err != nil {
-		logger.D("failed GET", err)
-	}
-	logger.D(result)
-
 	// get all items
 	var results []LastOfuro
 	err = lastTable.Scan().All(&results)
@@ -54,7 +103,4 @@ func Test() {
 	}
 	logger.D(results)
 
-	// use placeholders in filter expressions (see Expressions section below)
-	// var filtered []widget
-	// err = table.Scan().Filter("'Count' > ?", 10).All(&filtered)
 }
