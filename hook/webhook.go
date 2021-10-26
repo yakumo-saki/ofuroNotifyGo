@@ -38,7 +38,7 @@ func (wh *webHook) post(inOut, clickType, message string) error {
 	logger := ylog.GetLogger("webHook")
 
 	var payload external.WebhookApi
-	payload.InOut = inOut
+	payload.InOut = "bath" + inOut
 	payload.ClickType = clickType
 	payload.Message = message
 
@@ -55,7 +55,7 @@ func (wh *webHook) post(inOut, clickType, message string) error {
 	}
 
 	// Content-Type 設定
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -65,6 +65,7 @@ func (wh *webHook) post(inOut, clickType, message string) error {
 	defer resp.Body.Close()
 
 	io.TeeReader(resp.Body, os.Stderr)
+	logger.D(resp.StatusCode, resp.Body)
 
 	return nil
 }
