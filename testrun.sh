@@ -9,8 +9,8 @@ export SLACK_DISP_NAME=ofuroNotify
 export SlackIconEmoji=ghost
 
 # WebHooks - Mastodon
-export MASTODON_KEY=bcd123
-export MASTODON_URL=http://localhost
+export MASTODON_KEY=fe964bf1a315eaab3d3d86c98f7186c1fff365894624830e20ad2e5b2530c928
+export MASTODON_URL=https://example.com/api/v1/statuses
 
 export WEBHOOK_URL=http://localhost
 

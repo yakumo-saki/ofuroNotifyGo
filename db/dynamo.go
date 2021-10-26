@@ -22,7 +22,7 @@ func MakeSureTableExist() {
 func CreateLastOfuro(inOut string, lastInDateTime string) *LastOfuro {
 	l := LastOfuro{
 		Key:      LAST_TBL_KEY,
-		UnixTime: int(time.Now().Unix()),
+		UnixTime: int64(time.Now().Unix()),
 		InOut:    inOut,
 		DateTime: time.Now().Format("20060102150405"),
 		Lastin:   lastInDateTime,
@@ -81,7 +81,7 @@ func Test() {
 	logger.D("Table Created.")
 
 	// put item
-	l := LastOfuro{Key: LAST_TBL_KEY, UnixTime: int(time.Now().Unix()), InOut: "In", DateTime: ""}
+	l := LastOfuro{Key: LAST_TBL_KEY, UnixTime: int64(time.Now().Unix()), InOut: "In", DateTime: ""}
 	err := lastTable.Put(l).Run()
 	if err != nil {
 		logger.E("failed: put", err)

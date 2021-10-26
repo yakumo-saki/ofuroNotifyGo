@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
+	"errors"
+	"fmt"
 	"os"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
 	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/hook"
@@ -15,8 +19,16 @@ var Config config.ConfigStruct // dotenv + flags
 const IN = "In"
 const OUT = "Out"
 
-func main() {
+type IoTButtonEvent struct {
+	ClickType string `json:"clickType"`
+}
 
+type ConfigError struct {
+	Error string
+}
+
+// ctx context.Context
+func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
 	logger = ylog.GetLogger("main")
 	ylog.SetLogLevel("DEBUG")
 	ylog.SetLogOutput("STDERR")
@@ -27,7 +39,7 @@ func main() {
 	if cfgerr != nil {
 		logger.F(cfgerr)
 		os.Exit(10)
-		return
+		return "Config Error", errors.New("Config Error")
 	}
 
 	db.Init(cfg)
@@ -52,11 +64,24 @@ func main() {
 	newHistory := db.LastOfuroToHistory(*newOfuro)
 	err := db.PutLastOfuro(newOfuro)
 	if err != nil {
-
+		return "PutLastOfuro fail", err
 	}
 	db.PutHistory(&newHistory)
 
 	// Do hooks
 	hook.Init(cfg)
-	hook.Exec()
+	hook.Exec(inOut, event.ClickType, "Hello!!")
+
+	return fmt.Sprintf(event.ClickType), nil
+}
+
+func main() {
+	cfg := config.LoadConfig() // DEBUGモード判定のために一度読んでしまう
+
+	if cfg.DebugNoLambda {
+		ev := IoTButtonEvent{ClickType: "SINGLE"}
+		HandleRequest(context.TODO(), ev)
+	} else {
+		lambda.Start(HandleRequest)
+	}
 }

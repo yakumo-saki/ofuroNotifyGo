@@ -32,24 +32,26 @@ func (sh *slackHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (sh slackHook) exec() {
+func (sh *slackHook) exec(_, _, message string) {
 	logger := ylog.GetLogger("slackHook")
 	logger.D("exec " + sh.url)
 
 	var body external.SlackMessage
 	body.Channel = sh.channel
-	body.Icon_emoji = sh.iconEmoji
-	body.Text = "hello !"
+	body.IconEmoji = sh.iconEmoji
+
+	body.Text = message
 
 	json, _ := json.Marshal(body)
-	err := post(sh.url, json)
+	err := sh.post(sh.url, json)
 	if err != nil {
 		logger.E("Slack POST Failed: ", err)
+		return
 	}
-
+	logger.D("Slack POST OK")
 }
 
-func post(url string, body []byte) error {
+func (sh *slackHook) post(url string, body []byte) error {
 	logger := ylog.GetLogger("slackHook")
 	req, err := http.NewRequest(
 		"POST",

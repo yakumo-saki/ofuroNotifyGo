@@ -19,6 +19,9 @@ type ConfigStruct struct {
 	MastodonUrl string
 	MastodonKey string
 	WebhookUrl  string
+
+	DebugNoHooks  bool
+	DebugNoLambda bool
 }
 
 func (c ConfigStruct) String() string {

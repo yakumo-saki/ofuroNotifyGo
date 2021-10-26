@@ -8,6 +8,7 @@ require (
 )
 
 require (
+	github.com/aws/aws-lambda-go v1.27.0 // indirect
 	github.com/cenkalti/backoff v2.1.1+incompatible // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect

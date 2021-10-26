@@ -27,5 +27,8 @@ func LoadFromEnvValue() *ConfigStruct {
 
 	conf.WebhookUrl = os.Getenv("WEBHOOK_URL")
 
+	conf.DebugNoHooks, _ = strconv.ParseBool(os.Getenv("DEBUG_NO_HOOKS"))
+	conf.DebugNoLambda, _ = strconv.ParseBool(os.Getenv("DEBUG_NO_LAMBDA"))
+
 	return &conf
 }
