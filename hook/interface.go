@@ -1,8 +1,11 @@
 package hook
 
-import "github.com/yakumo-saki/ofuroNotifyGo/config"
+import (
+	"github.com/yakumo-saki/ofuroNotifyGo/config"
+	"github.com/yakumo-saki/ofuroNotifyGo/db"
+)
 
 type externalHooks interface {
 	init(cfg *config.ConfigStruct) bool
-	exec(inOut, clickType, message string)
+	exec(last db.LastOfuro, message string)
 }

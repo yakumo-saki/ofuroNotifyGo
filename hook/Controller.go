@@ -2,6 +2,7 @@ package hook
 
 import (
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
+	"github.com/yakumo-saki/ofuroNotifyGo/db"
 )
 
 var hooks []externalHooks
@@ -24,8 +25,8 @@ func Init(cfg *config.ConfigStruct) {
 
 }
 
-func Exec(inOut, clickType, message string) {
+func Exec(last db.LastOfuro, message string) {
 	for _, v := range hooks {
-		v.exec(inOut, clickType, message)
+		v.exec(last, message)
 	}
 }

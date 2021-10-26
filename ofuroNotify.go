@@ -70,7 +70,7 @@ func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
 
 	// Do hooks
 	hook.Init(cfg)
-	hook.Exec(inOut, event.ClickType, "Hello!!")
+	hook.Exec(*newOfuro, "Hello!!")
 
 	return fmt.Sprintf(event.ClickType), nil
 }

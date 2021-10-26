@@ -1,13 +1,16 @@
 package hook
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
+	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
@@ -28,17 +31,19 @@ func (sh *mastodonHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (sh *mastodonHook) exec(_, _, message string) {
+func (sh *mastodonHook) exec(last db.LastOfuro, message string) {
 	logger := ylog.GetLogger("mastodonHook")
-	logger.D("exec " + sh.url + " " + sh.apiKey)
+
+	now := time.Now()
+	logger.D("Mastodon POST start")
+
 	err := sh.post(message)
 	if err != nil {
 		logger.E("Mastodon POST failed: ", err)
 		return
 	}
 
-	logger.D("Mastodon POST OK")
-
+	logger.I(fmt.Sprintf("Mastodon POST took %v ms", time.Since(now).Milliseconds()))
 }
 
 // curl -X POST -d "status=test message" --header "Authorization: Bearer $ACCESS_TOKEN" -sS http://localhost:3000/api/v1/statuses; echo $?

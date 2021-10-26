@@ -3,9 +3,12 @@ package hook
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
+	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/external"
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
@@ -32,9 +35,11 @@ func (sh *slackHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (sh *slackHook) exec(_, _, message string) {
+func (sh *slackHook) exec(last db.LastOfuro, message string) {
 	logger := ylog.GetLogger("slackHook")
-	logger.D("exec " + sh.url)
+
+	now := time.Now()
+	logger.D("Slack POST start")
 
 	var body external.SlackMessage
 	body.Channel = sh.channel
@@ -48,7 +53,8 @@ func (sh *slackHook) exec(_, _, message string) {
 		logger.E("Slack POST Failed: ", err)
 		return
 	}
-	logger.D("Slack POST OK")
+
+	logger.I(fmt.Sprintf("Slack POST took %v ms", time.Since(now).Milliseconds()))
 }
 
 func (sh *slackHook) post(url string, body []byte) error {

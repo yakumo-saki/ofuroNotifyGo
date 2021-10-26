@@ -3,11 +3,14 @@ package hook
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
+	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/external"
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
@@ -27,11 +30,15 @@ func (wh *webHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (wh *webHook) exec(inOut, clickType, message string) {
+func (wh *webHook) exec(last db.LastOfuro, message string) {
 	logger := ylog.GetLogger("webHook")
-	logger.D("exec " + wh.url)
 
-	wh.post(inOut, clickType, message)
+	now := time.Now()
+	logger.D("Webhook POST start")
+
+	wh.post(last.InOut, last.ClickType, message)
+
+	logger.I(fmt.Sprintf("Webhook POST took %v ms", time.Since(now).Milliseconds()))
 }
 
 func (wh *webHook) post(inOut, clickType, message string) error {
