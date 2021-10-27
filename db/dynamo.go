@@ -1,8 +1,6 @@
 package db
 
 import (
-	"time"
-
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
@@ -17,18 +15,6 @@ func MakeSureTableExist() {
 	if err := db.CreateTable(HIST_TBL, OfuroHistory{}).Run(); err != nil {
 		logger.D(HIST_TBL+" Table already created.", err)
 	}
-}
-
-func CreateLastOfuro(inOut string, lastInDateTime string) *LastOfuro {
-	l := LastOfuro{
-		Key:      LAST_TBL_KEY,
-		UnixTime: int64(time.Now().Unix()),
-		InOut:    inOut,
-		DateTime: time.Now().Format("20060102150405"),
-		Lastin:   lastInDateTime,
-	}
-
-	return &l
 }
 
 func GetLastOfuro() *LastOfuro {

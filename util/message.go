@@ -3,12 +3,9 @@ package util
 import (
 	"fmt"
 
+	"github.com/yakumo-saki/ofuroNotifyGo/CS"
 	"github.com/yakumo-saki/ofuroNotifyGo/db"
 )
-
-const CLICK_SINGLE = "SINGLE"
-const CLICK_LONG = "LONG"
-const CLICK_DOUBLE = "DOUBLE"
 
 const MIN_SEC = 60
 const HOUR_SEC = MIN_SEC * 60
@@ -57,9 +54,9 @@ func CreateMessage(last db.LastOfuro) string {
 func createMessageIn(clickType string) string {
 
 	message := ""
-	if clickType == CLICK_DOUBLE {
+	if clickType == CS.CLICK_DOUBLE {
 		message = "シャワる 🛀"
-	} else if clickType == CLICK_LONG {
+	} else if clickType == CS.CLICK_LONG {
 		message = "おふろる 📲🛀"
 	} else {
 		message = "おふろる 🛀"
