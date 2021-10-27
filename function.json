@@ -1,0 +1,16 @@
+{
+  "Architectures": [
+    "x86_64"
+  ],
+  "Description": "AWS IoT Button ofuroNotifier",
+  "FunctionName": "ofuroNotifyGo",
+  "Handler": "ofuroNotify",
+  "MemorySize": 128,
+  "Role": "arn:aws:iam::416850594056:role/service-role/ofuro-notify-role-3vggnxzk",
+  "Runtime": "go1.x",
+  "Tags": {},
+  "Timeout": 15,
+  "TracingConfig": {
+    "Mode": "PassThrough"
+  }
+}
