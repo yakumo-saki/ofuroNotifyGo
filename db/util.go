@@ -6,13 +6,14 @@ import (
 	"github.com/yakumo-saki/ofuroNotifyGo/CS"
 )
 
-func CreateLastOfuro(inOut string, lastInDateTime string) *LastOfuro {
+func CreateLastOfuro(inOut string, clickType string, lastInDateTime string) *LastOfuro {
 
 	l := LastOfuro{
-		Key:      LAST_TBL_KEY,
-		UnixTime: int64(time.Now().Unix()),
-		InOut:    inOut,
-		DateTime: time.Now().Format("20060102150405"),
+		Key:       LAST_TBL_KEY,
+		UnixTime:  int64(time.Now().Unix()),
+		ClickType: clickType,
+		InOut:     inOut,
+		DateTime:  time.Now().Format("20060102150405"),
 	}
 
 	switch inOut {
