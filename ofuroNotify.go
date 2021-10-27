@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/yakumo-saki/ofuroNotifyGo/CS"
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
 	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/hook"
@@ -19,8 +20,12 @@ var Config config.ConfigStruct // dotenv + flags
 const IN = "In"
 const OUT = "Out"
 
+type DeviceEvent struct {
+	buttonClicked IoTButtonEvent
+}
 type IoTButtonEvent struct {
-	ClickType string `json:"clickType"`
+	ClickType    string `json:"clickType"`
+	ReportedTime string `json:"ReportedTime"`
 }
 
 type ConfigError struct {
@@ -28,7 +33,7 @@ type ConfigError struct {
 }
 
 // ctx context.Context
-func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
+func HandleRequest(ctx context.Context, event DeviceEvent) (string, error) {
 	logger := ylog.GetLogger()
 	ylog.SetLogLevel("DEBUG")
 	ylog.SetLogOutput("STDERR")
@@ -42,23 +47,33 @@ func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
 		return "Config Error", errors.New("Config Error")
 	}
 
+	ylog.SetLogLevel(cfg.LogLevel)
+	ylog.SetLogType(cfg.LogType)
+
+	// logger.I(event)
+	// bytes, _ := json.MarshalIndent(event, "", "\t")
+	// logger.I(string(bytes))
+
 	db.Init(cfg)
 	db.MakeSureTableExist()
 
 	// お風呂 In Out 判定
-	inOut := "In"
+	inOut := CS.OFURO_IN
 	last := db.GetLastOfuro()
-	if last != nil && last.InOut == "In" {
-		inOut = "Out"
+	if last != nil && last.InOut == CS.OFURO_IN {
+		inOut = CS.OFURO_OUT
 	}
+
+	//
+	clickType := event.buttonClicked.ClickType
 
 	//
 	var newOfuro *db.LastOfuro
 	switch inOut {
 	case IN:
-		newOfuro = db.CreateLastOfuro(inOut, "")
+		newOfuro = db.CreateLastOfuro(inOut, clickType, "")
 	case OUT:
-		newOfuro = db.CreateLastOfuro(inOut, last.DateTime)
+		newOfuro = db.CreateLastOfuro(inOut, clickType, last.DateTime)
 	}
 
 	newHistory := db.LastOfuroToHistory(*newOfuro)
@@ -72,7 +87,7 @@ func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
 	hook.Init(cfg)
 	hook.Exec(*newOfuro)
 
-	return fmt.Sprintf(event.ClickType), nil
+	return "SINGLE", nil // fmt.Sprintf(event.ClickType), nil
 }
 
 func main() {
@@ -85,7 +100,7 @@ func main() {
 		ylog.SetLogOutput("STDERR")
 
 		now := time.Now()
-		ev := IoTButtonEvent{ClickType: "SINGLE"}
+		ev := DeviceEvent{IoTButtonEvent{ClickType: "SINGLE"}}
 		HandleRequest(context.TODO(), ev)
 
 		logger.I(fmt.Sprintf("Overall took %v ms", time.Since(now).Milliseconds()))

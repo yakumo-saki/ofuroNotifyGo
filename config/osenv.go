@@ -14,8 +14,9 @@ func LoadFromEnvValue() *ConfigStruct {
 	conf.Region = os.Getenv("AWS_REGION")
 	conf.Endpoint = os.Getenv("ENDPOINT")
 	conf.DisableSSL, _ = strconv.ParseBool(os.Getenv("DISABLE_SSL"))
-	conf.Output = os.Getenv("OUTPUT")
-	conf.Loglevel = os.Getenv("LOGLEVEL")
+
+	conf.LogLevel = os.Getenv("LOG_LEVEL")
+	conf.LogType = os.Getenv("LOG_TYPE")
 
 	conf.SlackHookUrl = os.Getenv("SLACK_URL")
 	conf.SlackChannel = os.Getenv("SLACK_CHANNEL")

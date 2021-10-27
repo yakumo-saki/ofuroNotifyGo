@@ -3,11 +3,11 @@ package config
 // 未設定ならデフォルト値をセットするもの
 func SetDefaultConfig(c *ConfigStruct) {
 
-	if c.Output == "" {
-		c.Output = "JSON"
+	if c.LogType == "" {
+		c.LogType = "PLAIN"
 	}
-	if c.Loglevel == "" {
-		c.Output = "WARN"
+	if c.LogLevel == "" {
+		c.LogLevel = "WARN"
 	}
 
 	// slack
