@@ -35,8 +35,8 @@ func (sh *slackHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (sh *slackHook) exec(last db.LastOfuro, message string) {
-	logger := ylog.GetLogger("slackHook")
+func (sh *slackHook) exec(last db.LastOfuro) {
+	logger := ylog.GetLogger()
 
 	now := time.Now()
 	logger.D("Slack POST start")
@@ -45,7 +45,7 @@ func (sh *slackHook) exec(last db.LastOfuro, message string) {
 	body.Channel = sh.channel
 	body.IconEmoji = sh.iconEmoji
 
-	body.Text = message
+	body.Text = sh.createMessage(last)
 
 	json, _ := json.Marshal(body)
 	err := sh.post(sh.url, json)
@@ -57,8 +57,13 @@ func (sh *slackHook) exec(last db.LastOfuro, message string) {
 	logger.I(fmt.Sprintf("Slack POST took %v ms", time.Since(now).Milliseconds()))
 }
 
+func (sh *slackHook) createMessage(last db.LastOfuro) string {
+
+	return "hello"
+}
+
 func (sh *slackHook) post(url string, body []byte) error {
-	logger := ylog.GetLogger("slackHook")
+	logger := ylog.GetLogger()
 	req, err := http.NewRequest(
 		"POST",
 		url,

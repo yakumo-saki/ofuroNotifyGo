@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
@@ -13,7 +14,6 @@ import (
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
-var logger = ylog.GetLogger("main")
 var Config config.ConfigStruct // dotenv + flags
 
 const IN = "In"
@@ -29,7 +29,7 @@ type ConfigError struct {
 
 // ctx context.Context
 func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
-	logger = ylog.GetLogger("main")
+	logger := ylog.GetLogger()
 	ylog.SetLogLevel("DEBUG")
 	ylog.SetLogOutput("STDERR")
 
@@ -70,17 +70,25 @@ func HandleRequest(ctx context.Context, event IoTButtonEvent) (string, error) {
 
 	// Do hooks
 	hook.Init(cfg)
-	hook.Exec(*newOfuro, "Hello!!")
+	hook.Exec(*newOfuro)
 
 	return fmt.Sprintf(event.ClickType), nil
 }
 
 func main() {
+	ylog.Init()
 	cfg := config.LoadConfig() // DEBUGモード判定のために一度読んでしまう
 
 	if cfg.DebugNoLambda {
+		logger := ylog.GetLogger()
+		ylog.SetLogLevel("DEBUG")
+		ylog.SetLogOutput("STDERR")
+
+		now := time.Now()
 		ev := IoTButtonEvent{ClickType: "SINGLE"}
 		HandleRequest(context.TODO(), ev)
+
+		logger.I(fmt.Sprintf("Overall took %v ms", time.Since(now).Milliseconds()))
 	} else {
 		lambda.Start(HandleRequest)
 	}

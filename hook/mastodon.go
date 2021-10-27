@@ -31,13 +31,13 @@ func (sh *mastodonHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (sh *mastodonHook) exec(last db.LastOfuro, message string) {
-	logger := ylog.GetLogger("mastodonHook")
+func (mh *mastodonHook) exec(last db.LastOfuro) {
+	logger := ylog.GetLogger()
 
 	now := time.Now()
 	logger.D("Mastodon POST start")
 
-	err := sh.post(message)
+	err := mh.post(mh.createMessage(last))
 	if err != nil {
 		logger.E("Mastodon POST failed: ", err)
 		return
@@ -46,9 +46,14 @@ func (sh *mastodonHook) exec(last db.LastOfuro, message string) {
 	logger.I(fmt.Sprintf("Mastodon POST took %v ms", time.Since(now).Milliseconds()))
 }
 
+func (mh *mastodonHook) createMessage(last db.LastOfuro) string {
+
+	return "hello"
+}
+
 // curl -X POST -d "status=test message" --header "Authorization: Bearer $ACCESS_TOKEN" -sS http://localhost:3000/api/v1/statuses; echo $?
 func (sh *mastodonHook) post(message string) error {
-	logger := ylog.GetLogger("mastodonHook")
+	logger := ylog.GetLogger()
 
 	params := url.Values{}
 	params.Set("status", message+" 👁")

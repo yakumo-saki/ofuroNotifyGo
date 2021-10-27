@@ -6,9 +6,9 @@ import (
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
-var logger = ylog.GetLogger("dynamo")
-
 func MakeSureTableExist() {
+	logger := ylog.GetLogger()
+
 	db := getConnection()
 
 	if err := db.CreateTable(LAST_TBL, LastOfuro{}).Run(); err != nil {
@@ -32,6 +32,8 @@ func CreateLastOfuro(inOut string, lastInDateTime string) *LastOfuro {
 }
 
 func GetLastOfuro() *LastOfuro {
+	logger := ylog.GetLogger()
+
 	db := getConnection()
 
 	lastTable := db.Table(LAST_TBL)
@@ -63,44 +65,4 @@ func PutHistory(history *OfuroHistory) error {
 	err := lastTable.Put(history).Run()
 
 	return err
-}
-
-func Test() {
-
-	db := getConnection()
-
-	lastTable := db.Table(LAST_TBL)
-	histTable := db.Table(HIST_TBL)
-
-	if err := db.CreateTable(LAST_TBL, LastOfuro{}).Run(); err != nil {
-		logger.D(LAST_TBL+" Table already created.", err)
-	}
-	if err := db.CreateTable(HIST_TBL, OfuroHistory{}).Run(); err != nil {
-		logger.D(HIST_TBL+" Table already created.", err)
-	}
-	logger.D("Table Created.")
-
-	// put item
-	l := LastOfuro{Key: LAST_TBL_KEY, UnixTime: int64(time.Now().Unix()), InOut: "In", DateTime: ""}
-	err := lastTable.Put(l).Run()
-	if err != nil {
-		logger.E("failed: put", err)
-	}
-	logger.D("LastOfuro PUT OK.")
-
-	h := LastOfuroToHistory(l)
-	err = histTable.Put(h).Run()
-	if err != nil {
-		logger.E("Histry failed: put", err)
-	}
-	logger.D("Histry PUT OK.")
-
-	// get all items
-	var results []LastOfuro
-	err = lastTable.Scan().All(&results)
-	if err != nil {
-		logger.D("failed SCAN", err)
-	}
-	logger.D(results)
-
 }

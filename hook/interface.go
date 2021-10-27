@@ -7,5 +7,5 @@ import (
 
 type externalHooks interface {
 	init(cfg *config.ConfigStruct) bool
-	exec(last db.LastOfuro, message string)
+	exec(last db.LastOfuro)
 }

@@ -30,19 +30,24 @@ func (wh *webHook) init(cfg *config.ConfigStruct) bool {
 	return true
 }
 
-func (wh *webHook) exec(last db.LastOfuro, message string) {
-	logger := ylog.GetLogger("webHook")
+func (wh *webHook) exec(last db.LastOfuro) {
+	logger := ylog.GetLogger()
 
 	now := time.Now()
 	logger.D("Webhook POST start")
 
-	wh.post(last.InOut, last.ClickType, message)
+	wh.post(last.InOut, last.ClickType, wh.createMessage(last))
 
 	logger.I(fmt.Sprintf("Webhook POST took %v ms", time.Since(now).Milliseconds()))
 }
 
+func (wh *webHook) createMessage(last db.LastOfuro) string {
+
+	return "hello"
+}
+
 func (wh *webHook) post(inOut, clickType, message string) error {
-	logger := ylog.GetLogger("webHook")
+	logger := ylog.GetLogger()
 
 	var payload external.WebhookApi
 	payload.InOut = "bath" + inOut

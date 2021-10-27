@@ -1,6 +1,8 @@
 package ylog
 
 import (
+	"path"
+	"runtime"
 	"strings"
 )
 
@@ -11,9 +13,37 @@ type Logging struct {
 
 var logging Logging
 
+var projectBaseDir string
+
+// Must call this from file in project root dir
+func Init() {
+	_, filepath, _, ok := runtime.Caller(1)
+	if !ok {
+		projectBaseDir = ""
+	}
+	fn := path.Base(filepath)
+	projectBaseDir = strings.Replace(filepath, fn, "", 1)
+}
+
+func GetLogger() *YLogger {
+	pointer, filepath, _, ok := runtime.Caller(1)
+	fn := runtime.FuncForPC(pointer)
+	if !ok || fn == nil {
+		return GetLoggerByName("UNKNOWN")
+	}
+
+	if false {
+		return GetLoggerByName(fn.Name())
+	}
+
+	fp := strings.Replace(filepath, projectBaseDir, "", 1)
+	return GetLoggerByName(fp)
+
+}
+
 // Loggerを取得します
 // name = 名称。 main とか sub1 とか。 ログに出力される。
-func GetLogger(name string) *YLogger {
+func GetLoggerByName(name string) *YLogger {
 	logger := &YLogger{
 		name:      name,
 		logOutput: &logging.logOutput,

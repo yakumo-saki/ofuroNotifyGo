@@ -15,18 +15,17 @@ export MASTODON_URL=https://example.com/api/v1/statuses
 # WebHooks - Closed API
 export WEBHOOK_URL=http://example.com/api/beep
 
+# LOGLEVEL (default=WARN, good for production)
+export LOG_LEVEL=DEBUG
+
 # DEBUG for dynamodb local environment.
 # comment out on production
 export ENDPOINT=http://localhost:8000
 export DISABLE_SSL=true
+export DEBUG_NO_LAMBDA=1 # DEBUG no lambda function
 
-# LOGLEVEL (default=WARN)
-export LOG_LEVEL=DEBUG
-
-# DEBUG DB R/W only. no webhooks
+# DEBUG DB R/W only. dont exec webhooks
 export DEBUG_NO_HOOKS=0
 
-# DEBUG no lambda function
-export DEBUG_NO_LAMBDA=1
 
 go run ofuroNotify.go
