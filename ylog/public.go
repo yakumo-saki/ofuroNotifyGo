@@ -62,9 +62,9 @@ func GetLoggerByName(name string) *YLogger {
 // output = [STDERR | STDOUT]
 func SetLogOutput(output string) {
 	switch strings.ToUpper(output) {
-	case "STDERR":
+	case LOG_OUTPUT_STDERR:
 		logging.logOutput = 0
-	case "STDOUT":
+	case LOG_OUTPUT_STDOUT:
 		logging.logOutput = 1
 	default:
 		panic("BAD logOutput " + output)
@@ -75,17 +75,17 @@ func SetLogOutput(output string) {
 // level = [TRACE | DEBUG | INFO | WARN | ERROR | FATAL]
 func SetLogLevel(level string) {
 	switch strings.ToUpper(level) {
-	case "TRACE":
+	case LOG_LEVEL_TRACE:
 		logging.logLevel = 0
-	case "DEBUG":
+	case LOG_LEVEL_DEBUG:
 		logging.logLevel = 1
-	case "INFO":
+	case LOG_LEVEL_INFO:
 		logging.logLevel = 2
-	case "WARN":
+	case LOG_LEVEL_WARN:
 		logging.logLevel = 3
-	case "ERROR":
+	case LOG_LEVEL_ERROR:
 		logging.logLevel = 4
-	case "FATAL":
+	case LOG_LEVEL_FATAL:
 		logging.logLevel = 5
 	default:
 		panic("SetLogLevel: BAD loglevel " + level)
@@ -96,9 +96,9 @@ func SetLogLevel(level string) {
 // logtype = [PLAIN | JSON]
 func SetLogType(logtype string) {
 	switch strings.ToUpper(logtype) {
-	case "PLAIN":
+	case LOG_TYPE_PLAIN:
 		logging.outputType = OUTPUT_PLAIN
-	case "JSON":
+	case LOG_TYPE_JSON:
 		logging.outputType = OUTPUT_JSON
 	default:
 		panic("SetLogType: BAD logtype " + logtype)

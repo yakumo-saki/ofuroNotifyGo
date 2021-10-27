@@ -8,9 +8,9 @@ import (
 )
 
 type awsJsonLog struct {
-	time    string
-	level   string
-	message string
+	Time    string
+	Level   string
+	Message string
 }
 
 // internal log output implementation
@@ -22,9 +22,9 @@ func (l *YLogger) logOutputJson(level int8, args ...interface{}) {
 		message := fmt.Sprint(args...)
 
 		out := awsJsonLog{
-			time:    t,
-			level:   lv,
-			message: message,
+			Time:    t,
+			Level:   lv,
+			Message: message,
 		}
 
 		bytes, _ := json.MarshalIndent(out, "", "\t")

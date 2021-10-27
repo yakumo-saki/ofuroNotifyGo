@@ -1,15 +1,16 @@
 package config
 
 import (
-	"strconv"
+	"encoding/json"
 )
 
 type ConfigStruct struct {
 	Region     string
 	Endpoint   string
 	DisableSSL bool
-	Output     string
-	Loglevel   string
+
+	LogLevel string
+	LogType  string
 
 	SlackHookUrl     string
 	SlackChannel     string
@@ -25,7 +26,6 @@ type ConfigStruct struct {
 }
 
 func (c ConfigStruct) String() string {
-	return "Region=" + c.Region + " ENDPOINT=" + c.Endpoint +
-		" DISABLE_SSL=" + strconv.FormatBool(c.DisableSSL) +
-		" OUTPUT=" + c.Output + " LOGLEVEL=" + c.Loglevel
+	bytes, _ := json.MarshalIndent(c, "", "\t")
+	return string(bytes)
 }

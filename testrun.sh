@@ -26,6 +26,6 @@ export DEBUG_NO_LAMBDA=1 # DEBUG no lambda function
 
 # DEBUG DB R/W only. dont exec webhooks
 export DEBUG_NO_HOOKS=0
-
+export LOG_TYPE=JSON  # JSON or PLAIN
 
 go run ofuroNotify.go

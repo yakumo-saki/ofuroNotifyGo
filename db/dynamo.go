@@ -31,7 +31,6 @@ func GetLastOfuro() *LastOfuro {
 		logger.D("failed GET:", err)
 		return nil
 	}
-	logger.D(result)
 
 	return &result
 }

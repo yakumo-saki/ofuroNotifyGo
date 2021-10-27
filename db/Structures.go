@@ -1,5 +1,7 @@
 package db
 
+import "encoding/json"
+
 const LAST_TBL = "LastOfuro"
 const LAST_TBL_KEY = "LAST"
 
@@ -38,4 +40,14 @@ func LastOfuroToHistory(lastOfuro LastOfuro) OfuroHistory {
 		DurationSec: lastOfuro.DurationSec,
 		Lastin:      lastOfuro.Lastin,
 	}
+}
+
+func (c OfuroHistory) String() string {
+	bytes, _ := json.MarshalIndent(c, "", "\t")
+	return string(bytes)
+}
+
+func (l LastOfuro) String() string {
+	bytes, _ := json.MarshalIndent(l, "", "\t")
+	return string(bytes)
 }
