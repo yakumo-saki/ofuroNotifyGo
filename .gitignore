@@ -1,6 +1,9 @@
 #
 debugrun.sh
 
+# lambroll setting
+function.json
+
 build/
 
 # Binaries for programs and plugins
