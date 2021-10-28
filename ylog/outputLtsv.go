@@ -7,23 +7,23 @@ import (
 )
 
 // internal log output implementation
-func (l *YLogger) logOutputPlain(level int8, args ...interface{}) {
+func (l *YLogger) logOutputLtsv(level int8, args ...interface{}) {
 	if *l.logLevel <= level {
 		t := time.Now().Format("2006/1/2 15:04:05")
 		lv := l.levelToString(level)
 
-		msg := t + " " + l.name + " " + lv
+		msg := fmt.Sprintf("time:%s\tlevel:%s\tname:%s", t, lv, l.name)
 
 		for k, v := range withValues {
-			msg = fmt.Sprintf("%s %s=%s", msg, k, v)
+			msg = fmt.Sprintf("%s\t%s:%s", msg, k, v)
 		}
 
 		if len(args) > 0 {
-			msg = msg + " " + fmt.Sprint(args...)
+			msg = fmt.Sprintf("%s\tmessage:%s", msg, fmt.Sprint(args...))
 		}
 
 		for k, v := range l.values {
-			msg = fmt.Sprintf("%s %s=%s", msg, k, v)
+			msg = fmt.Sprintf("%s\t%s:%s", msg, k, v)
 		}
 
 		switch *l.logOutput {

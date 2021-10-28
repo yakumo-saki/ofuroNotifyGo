@@ -10,10 +10,10 @@ func MakeSureTableExist() {
 	db := getConnection()
 
 	if err := db.CreateTable(LAST_TBL, LastOfuro{}).Run(); err != nil {
-		logger.D(LAST_TBL+" Table already created.", err)
+		logger.Add("err", err).Add("table", LAST_TBL).D("Create table failed. (maybe Table already exist).")
 	}
 	if err := db.CreateTable(HIST_TBL, OfuroHistory{}).Run(); err != nil {
-		logger.D(HIST_TBL+" Table already created.", err)
+		logger.Add("err", err).Add("table", HIST_TBL).D("Create table failed. (maybe Table already exist).")
 	}
 }
 
@@ -28,7 +28,7 @@ func GetLastOfuro() *LastOfuro {
 	var result LastOfuro
 	err := lastTable.Get("key", LAST_TBL_KEY).One(&result)
 	if err != nil {
-		logger.D("failed GET:", err)
+		logger.Add("err", err).Add("table", LAST_TBL).Add("key", LAST_TBL_KEY).D("GET failed")
 		return nil
 	}
 

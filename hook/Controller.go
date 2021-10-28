@@ -35,9 +35,9 @@ func Exec(last db.LastOfuro) {
 
 	if dontExecHooks {
 		logger.I("DontExecHooks enabled. dump parameters.")
-		logger.I("LastOfuro:", last)
+		logger.Add("LastOfuro", last).I()
 
-		logger.I("Message:", util.CreateMessage(last))
+		logger.Add("Message", util.CreateMessage(last)).I()
 		return
 	}
 	for _, v := range hooks {

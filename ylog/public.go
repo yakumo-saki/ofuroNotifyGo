@@ -1,7 +1,6 @@
 package ylog
 
 import (
-	"fmt"
 	"path"
 	"runtime"
 	"strings"
@@ -13,11 +12,9 @@ type Logging struct {
 	outputType int8
 }
 
-const OUTPUT_PLAIN = 0
-const OUTPUT_JSON = 1
-
 var logging Logging
 
+// ファイル名の共通部分（/home/.../OfuroNotifyGo/ のような部分）
 var projectBaseDir string
 
 // Must call this from file in project root dir
@@ -100,18 +97,9 @@ func SetLogType(logtype string) {
 		logging.outputType = OUTPUT_PLAIN
 	case LOG_TYPE_JSON:
 		logging.outputType = OUTPUT_JSON
+	case LOG_TYPE_LTSV:
+		logging.outputType = OUTPUT_LTSV
 	default:
 		panic("SetLogType: BAD logtype " + logtype)
-	}
-}
-
-func (l *YLogger) log(level int8, args ...interface{}) {
-	switch logging.outputType {
-	case OUTPUT_PLAIN:
-		l.logOutputPlain(level, args...)
-	case OUTPUT_JSON:
-		l.logOutputJson(level, args...)
-	default:
-		panic("UNKNOWN OUTPUT : " + fmt.Sprint(logging.outputType))
 	}
 }

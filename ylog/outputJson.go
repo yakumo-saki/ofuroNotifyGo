@@ -4,13 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
+
+	"github.com/imdario/mergo"
 )
 
 type awsJsonLog struct {
-	Time    string
-	Level   string
-	Message string
+	Time    string                 `json:"time"`
+	Level   string                 `json:"level"`
+	Name    string                 `json:"name"`
+	Message string                 `json:"message"`
+	Values  map[string]interface{} `json:"values"`
 }
 
 // internal log output implementation
@@ -19,15 +24,22 @@ func (l *YLogger) logOutputJson(level int8, args ...interface{}) {
 		t := time.Now().Format("2006/1/2 15:04:05")
 		lv := l.levelToString(level)
 
-		message := fmt.Sprint(args...)
+		var v map[string]interface{}
+		mergo.Merge(&v, withValues, mergo.WithOverride)
+		mergo.Merge(&v, l.values, mergo.WithOverride)
 
 		out := awsJsonLog{
-			Time:    t,
-			Level:   lv,
-			Message: message,
+			Time:   t,
+			Level:  strings.Trim(lv, " "),
+			Name:   l.name,
+			Values: v,
 		}
 
-		bytes, _ := json.MarshalIndent(out, "", "\t")
+		if len(args) > 0 {
+			out.Message = fmt.Sprint(args...)
+		}
+
+		bytes, _ := json.Marshal(out)
 		msg := string(bytes)
 
 		switch *l.logOutput {
@@ -36,6 +48,5 @@ func (l *YLogger) logOutputJson(level int8, args ...interface{}) {
 		case 1:
 			fmt.Fprintln(os.Stdout, msg)
 		}
-
 	}
 }

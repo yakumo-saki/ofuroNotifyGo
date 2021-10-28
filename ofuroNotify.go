@@ -40,8 +40,8 @@ func HandleRequest(ctx context.Context, event DeviceEvent) (string, error) {
 
 	cfg := config.LoadConfig()
 	cfgerr := config.CheckConfig(cfg)
-	logger.D(cfg)
 	if cfgerr != nil {
+		logger.F(cfg)
 		logger.F(cfgerr)
 		os.Exit(10)
 		return "Config Error", errors.New("Config Error")
@@ -87,7 +87,7 @@ func HandleRequest(ctx context.Context, event DeviceEvent) (string, error) {
 	hook.Init(cfg)
 	hook.Exec(*newOfuro)
 
-	return "SINGLE", nil // fmt.Sprintf(event.ClickType), nil
+	return clickType, nil
 }
 
 func main() {
