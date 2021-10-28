@@ -6,7 +6,7 @@ export AWS_REGION=ap-northeast-3
 export SLACK_CHANNEL="#general"
 export SLACK_URL="Slack incoming webhook url like https://hooks.slack.com/services/~~~~"
 export SLACK_DISP_NAME=ofuroNotify
-export SLACK_ICON_EMOJI=ghost
+export SLACK_ICON_EMOJI=bath        # Slack Emoji Icon
 
 # WebHooks - Mastodon
 export MASTODON_KEY=dd964bf1a315eaab3d3d86c98f7186c1fff365894624830e20ad2e5b2530c928
@@ -26,6 +26,6 @@ export DEBUG_NO_LAMBDA=1 # DEBUG no lambda function
 
 # DEBUG DB R/W only. dont exec webhooks
 export DEBUG_NO_HOOKS=0
-export LOG_TYPE=JSON  # JSON or PLAIN
+export LOG_TYPE=JSON  # JSON or PLAIN or LTSV
 
 go run ofuroNotify.go

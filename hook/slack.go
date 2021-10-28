@@ -45,7 +45,7 @@ func (sh *slackHook) exec(last db.LastOfuro) {
 	var body external.SlackMessage
 	body.Channel = sh.channel
 	body.IconEmoji = sh.iconEmoji
-
+	body.Username = sh.displayName
 	body.Text = sh.createMessage(last)
 
 	json, _ := json.Marshal(body)
