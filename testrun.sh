@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-export AWS_REGION=ap-northeast-3
+export AWS_REGION=ap-northeast-3    # change to your dynamodb region
 
 # WebHooks - Slack
 export SLACK_CHANNEL="#general"
@@ -20,12 +20,11 @@ export LOG_LEVEL=DEBUG
 
 # DEBUG for dynamodb local environment.
 # comment out on production
-export ENDPOINT=http://localhost:8000
-export DISABLE_SSL=true
-export DEBUG_NO_LAMBDA=1 # DEBUG no lambda function
+export ENDPOINT=http://localhost:8000  # DynamoDB local endpoint.
+export DISABLE_SSL=true    # DynamoDB local needs this
+export DEBUG_NO_LAMBDA=1   # DEBUG execute in your pc
 
-# DEBUG DB R/W only. dont exec webhooks
-export DEBUG_NO_HOOKS=0
-export LOG_TYPE=JSON  # JSON or PLAIN or LTSV
+export DEBUG_NO_HOOKS=0 # DEBUG DB R/W only. dont exec webhooks
+export LOG_TYPE=JSON  # JSON or PLAIN or LTSV, recommend JSON for production
 
 go run ofuroNotify.go
