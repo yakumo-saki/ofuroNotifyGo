@@ -12,6 +12,7 @@ import (
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
 	"github.com/yakumo-saki/ofuroNotifyGo/db"
 	"github.com/yakumo-saki/ofuroNotifyGo/external"
+	"github.com/yakumo-saki/ofuroNotifyGo/util"
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
@@ -42,8 +43,8 @@ func (wh *webHook) exec(last db.LastOfuro) {
 }
 
 func (wh *webHook) createMessage(last db.LastOfuro) string {
-
-	return "hello"
+	msg := util.CreateMessage(last)
+	return msg
 }
 
 func (wh *webHook) post(inOut, clickType, message string) error {

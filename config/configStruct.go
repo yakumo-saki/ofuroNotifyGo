@@ -17,9 +17,11 @@ type ConfigStruct struct {
 	SlackDisplayName string
 	SlackIconEmoji   string
 
-	MastodonUrl string
-	MastodonKey string
-	WebhookUrl  string
+	MastodonUrl       string
+	MastodonKey       string
+	MastodonMsgSuffix string
+
+	WebhookUrl string
 
 	DebugNoHooks  bool
 	DebugNoLambda bool

@@ -11,22 +11,25 @@ import (
 
 	"github.com/yakumo-saki/ofuroNotifyGo/config"
 	"github.com/yakumo-saki/ofuroNotifyGo/db"
+	"github.com/yakumo-saki/ofuroNotifyGo/util"
 	"github.com/yakumo-saki/ofuroNotifyGo/ylog"
 )
 
 type mastodonHook struct {
-	apiKey string
-	url    string
+	apiKey    string
+	url       string
+	msgSuffix string
 }
 
-func (sh *mastodonHook) init(cfg *config.ConfigStruct) bool {
+func (mh *mastodonHook) init(cfg *config.ConfigStruct) bool {
 
 	if cfg.MastodonKey == "" || cfg.MastodonUrl == "" {
 		return false
 	}
 
-	sh.apiKey = cfg.MastodonKey
-	sh.url = cfg.MastodonUrl
+	mh.apiKey = cfg.MastodonKey
+	mh.url = cfg.MastodonUrl
+	mh.msgSuffix = cfg.MastodonMsgSuffix
 
 	return true
 }
@@ -47,30 +50,30 @@ func (mh *mastodonHook) exec(last db.LastOfuro) {
 }
 
 func (mh *mastodonHook) createMessage(last db.LastOfuro) string {
-
-	return "hello"
+	msg := util.CreateMessage(last)
+	return msg + mh.msgSuffix
 }
 
 // curl -X POST -d "status=test message" --header "Authorization: Bearer $ACCESS_TOKEN" -sS http://localhost:3000/api/v1/statuses; echo $?
-func (sh *mastodonHook) post(message string) error {
+func (mh *mastodonHook) post(message string) error {
 	logger := ylog.GetLogger()
 
 	params := url.Values{}
-	params.Set("status", message+" 👁")
+	params.Set("status", message)
 
 	req, err := http.NewRequest(
 		"POST",
-		sh.url,
+		mh.url,
 		strings.NewReader(params.Encode()),
 	)
 	if err != nil {
-		logger.E("NewReader failed")
+		logger.Add("err", err).E("NewReader failed")
 		return err
 	}
 
 	// Content-Type 設定
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Authorization", "Bearer "+sh.apiKey)
+	req.Header.Set("Authorization", "Bearer "+mh.apiKey)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

@@ -50,10 +50,6 @@ func HandleRequest(ctx context.Context, event DeviceEvent) (string, error) {
 	ylog.SetLogLevel(cfg.LogLevel)
 	ylog.SetLogType(cfg.LogType)
 
-	// logger.I(event)
-	// bytes, _ := json.MarshalIndent(event, "", "\t")
-	// logger.I(string(bytes))
-
 	db.Init(cfg)
 	db.MakeSureTableExist()
 

@@ -25,6 +25,7 @@ func LoadFromEnvValue() *ConfigStruct {
 
 	conf.MastodonKey = os.Getenv("MASTODON_KEY")
 	conf.MastodonUrl = os.Getenv("MASTODON_URL")
+	conf.MastodonMsgSuffix = os.Getenv("MASTODON_MSG_SUFFIX")
 
 	conf.WebhookUrl = os.Getenv("WEBHOOK_URL")
 
